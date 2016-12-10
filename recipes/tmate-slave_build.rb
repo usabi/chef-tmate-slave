@@ -18,6 +18,13 @@ script "compile_tmate-slave_part1" do
         ./autogen.sh || STATUS=1
         ./configure || STATUS=1
         make || STATUS=1
+        cp tmate-slave /usr/local/bin || STATUS=1
+        chmod 755 /usr/local/bin/tmate-slave || STATUS=1
         exit $STATUS
       EOH
+end
+
+poise_service 'tmate-slave' do
+  command '/usr/local/bin/tmate-slave'
+  action :enable
 end
