@@ -1,3 +1,5 @@
+port = node['port']
+host = node['host']
 
 git "/tmp/tmate-slave" do
   repository "https://github.com/nviennot/tmate-slave.git"
@@ -29,6 +31,9 @@ script "compile_tmate-slave_part1" do
         ./autogen.sh || STATUS=1
         ./configure || STATUS=1
         make || STATUS=1
+        if ps ax|grep tmate-slave|grep -v grep; then
+          service tmate-slave stop
+        fi
         cp tmate-slave /usr/local/bin || STATUS=1
         chmod 755 /usr/local/bin/tmate-slave || STATUS=1
         exit $STATUS
@@ -36,6 +41,7 @@ script "compile_tmate-slave_part1" do
 end
 
 poise_service 'tmate-slave' do
-  command '/usr/local/bin/tmate-slave'
+  command "/usr/local/bin/tmate-slave -k /root/keys -p #{port} -h #{host}"
   action :enable
+  restart_on_update true
 end
