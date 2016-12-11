@@ -28,6 +28,18 @@ Just include `tmate-slave` in your node's `run_list`:
 }
 ```
 
+You can specify alternate host and port too:
+
+```json
+{
+  ...
+  "normal": {
+    "port": "9922",
+    "host": "alternate"
+  }
+}
+```
+
 ## Contributing
 
 1. Fork the repository on Github
